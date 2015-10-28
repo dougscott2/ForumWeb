@@ -25,9 +25,6 @@ public class Main {
                     Session session = request.session();
                     String username = session.attribute("username");
 
-
-
-
                     ArrayList<Message> threads = new ArrayList();
                     for (Message message: messages){
                         if (message.replyId == -1){
@@ -39,15 +36,45 @@ public class Main {
                     m.put("threads", threads);
                     m.put("username", username);
 
-
-
                     return new ModelAndView(m, "threads.html");
                 }),
                 new MustacheTemplateEngine()
 
         );
 
-    }
+        Spark.post(
+                "/login",
+                ((request, response) -> {
+                    String username = request.queryParams("username");
+                    String password = request.queryParams("password");
+
+                    if (username.isEmpty()|| password.isEmpty()){
+                        Spark.halt(403);
+                    }
+
+                    User user = users.get(username);
+                    if (user == null){
+                        user = new User();
+                        user.password = password;
+                        users.put(username, user);
+                    }
+                    else if (!password.equals(user.password)){
+                        Spark.halt(403);
+                    }
+
+                    Session session = request.session();
+                    session.attribute("username", username);
+
+
+                    response.redirect("/");
+                    return "";
+                })
+
+        );
+
+    }//End Main
+
+
     static void addTestUsers( HashMap<String, User> users){
         users.put("Alice", new User());
         users.put("Bob", new User());
