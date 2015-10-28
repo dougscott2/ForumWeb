@@ -1,6 +1,7 @@
 package com.theironyard;
 
 import spark.ModelAndView;
+import spark.Session;
 import spark.Spark;
 import spark.template.mustache.MustacheTemplateEngine;
 
@@ -21,6 +22,12 @@ public class Main {
         Spark.get(
                 "/",
                 ((request, response) -> {
+                    Session session = request.session();
+                    String username = session.attribute("username");
+
+
+
+
                     ArrayList<Message> threads = new ArrayList();
                     for (Message message: messages){
                         if (message.replyId == -1){
@@ -30,6 +37,9 @@ public class Main {
 
                     HashMap m = new HashMap();
                     m.put("threads", threads);
+                    m.put("username", username);
+
+
 
                     return new ModelAndView(m, "threads.html");
                 }),
