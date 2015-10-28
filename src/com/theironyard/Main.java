@@ -41,6 +41,35 @@ public class Main {
                 new MustacheTemplateEngine()
 
         );
+        Spark.get(
+                "/replies",
+                ((request, response) -> {
+                    HashMap m = new HashMap();
+
+                    String id = request.queryParams("id");
+                    try {
+                        int idNum = Integer.valueOf(id);
+                        Message message = messages.get(idNum);
+                        m.put("message", message);
+
+                        ArrayList<Message> replies = new ArrayList();
+                        for (Message msg : messages){
+                            if (msg.replyId == message.id){
+                                replies.add(msg);
+                            }
+                        }
+                        m.put("replies", replies);
+
+                    } catch (Exception e){
+
+                    }
+
+                    return new ModelAndView(m, "replies.html");
+
+                }),
+                new MustacheTemplateEngine()
+
+        );
 
         Spark.post(
                 "/login",
@@ -65,11 +94,9 @@ public class Main {
                     Session session = request.session();
                     session.attribute("username", username);
 
-
                     response.redirect("/");
                     return "";
                 })
-
         );
 
     }//End Main
