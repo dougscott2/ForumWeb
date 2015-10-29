@@ -1,11 +1,16 @@
 {{#username}}
 Welcome, {{username}}! <br>
+<form action="create-message" method="post">
+    <input type="hidden" name="replyId" value="{{replyId}}"/>
+    <input type="text" placeholder="Write a post" name="text" size="50"/>
+    <button type="submit">Submit</button>
+</form><br>
 {{/username}}
 
 {{^username}}
 <form action="login" method="post">
-    <input type="text" placeholder="Username" name="username">
-    <input type="text" placeholder="Password" name="password">
+    <input type="text" placeholder="Username" name="username"/>
+    <input type="text" placeholder="Password" name="password"/>
     <button type="submit">Login or Create Account</button>
 </form>
 {{/username}}
