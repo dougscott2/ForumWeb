@@ -17,9 +17,7 @@ public class Main {
         addTestUsers(users);
         addTestMessages(messages);
 
-
-
-        Spark.get(
+      Spark.get(
                 "/",
                 ((request, response) -> {
                     Session session = request.session();
@@ -98,7 +96,6 @@ public class Main {
                     return "";
                 })
         );
-
     }//End Main
 
 
